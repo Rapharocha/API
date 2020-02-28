@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.algaworks.socialbooks.domain.Comentario;
 import com.algaworks.socialbooks.domain.Livro;
 import com.algaworks.socialbooks.repository.LivrosRepository;
 import com.algaworks.socialbooks.service.LivrosService;
@@ -51,24 +52,14 @@ public class LivrosResources {
 	@GetMapping("/{id}")
 	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
 		
-		 
-		Optional<Livro> livro = null;
-		try {
-		livro = livrosService.buscar(id);
-			
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
+		Optional<Livro> livro = livrosService.buscar(id);
 	    return ResponseEntity.status(HttpStatus.OK).body(livro);
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
-		try {
+	
 			livrosService.deletar(id);
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
 	    return ResponseEntity.noContent().build();
 	}
 	
@@ -76,12 +67,25 @@ public class LivrosResources {
 	public ResponseEntity<Void> atualizar (@RequestBody Livro livro , @PathVariable("id") Long id) {
 		
 		livro.setId(id);
-		try {
-			livrosService.atualizar(livro);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
+		livrosService.atualizar(livro);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PostMapping("/{id}/comentarios")
+	public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId , @RequestBody Comentario comentario) {
+		
+		livrosService.salvarComentario(livroId, comentario);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
+		
+		return ResponseEntity.created(uri).build();
+	}
+	
+	@GetMapping("/{id}/comentarios")
+	public ResponseEntity<List<Comentario>> listarComentario(@PathVariable("id") Long livroId){
+		
+		List<Comentario>comentarios = livrosService.listarComentarios(livroId);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(comentarios);
 	}
 }
