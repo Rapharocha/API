@@ -9,8 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 public class Comentario {
@@ -19,10 +23,14 @@ public class Comentario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty(message = "O comentário é obrigátorio")
 	private String texto;
 	
+	@JsonInclude(Include.NON_NULL)
 	private String usuario;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@JsonInclude(Include.NON_NULL)
 	private Date data;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

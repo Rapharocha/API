@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.algaworks.socialbooks.domain.Autor;
 import com.algaworks.socialbooks.repository.AutorRepository;
 import com.algaworks.socialbooks.service.exception.AutorExistentesException;
+import com.algaworks.socialbooks.service.exception.AutorNaoEncontradoException;
 
 @Service
 public class AutoresService {
@@ -31,5 +32,16 @@ public class AutoresService {
 			}
 		}
 		return autorRepository.save(autor);
+	}
+	
+	public Optional<Autor> buscar(Long id) {
+		
+		Optional<Autor> autor = autorRepository.findById(id);
+		
+		if(autor.isEmpty()) {
+			throw new AutorNaoEncontradoException("O autor não pôde ser encontrado");
+		}
+		
+		return autor;
 	}
 }
