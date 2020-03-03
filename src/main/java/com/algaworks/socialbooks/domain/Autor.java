@@ -16,12 +16,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Representa um Autor de um Livro")
 @Entity
 public class Autor {
 
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(example = "1")
 	private Long id;
 	
 	@NotEmpty(message = "O campo nome deve ser preenchido")
@@ -30,10 +35,12 @@ public class Autor {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@JsonInclude(Include.NON_NULL)
 	@NotNull(message = "O campo Data de nascimento deve ser preenchido")
+	@ApiModelProperty( example = "13/01/2000")
 	private Date nascimento;
 	
 	@JsonInclude(Include.NON_NULL)
 	@NotEmpty(message = "O campo nacionalidade deve ser preenchido")
+	@ApiModelProperty( example = "Brasileiro")
 	private String nacionalidade;
 	
 	@OneToMany(mappedBy = "autor")

@@ -16,14 +16,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+
 @Entity
 public class Comentario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@ApiModelProperty(example = "1")
 	private Long id;
 	
 	@NotEmpty(message = "O comentário é obrigátorio")
+	@ApiModelProperty(value = "Comentário de um livro ")
 	private String texto;
 	
 	@JsonInclude(Include.NON_NULL)
@@ -31,6 +37,7 @@ public class Comentario {
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@JsonInclude(Include.NON_NULL)
+	@ApiModelProperty(example = "20/02/2020")
 	private Date data;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
